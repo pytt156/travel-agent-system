@@ -44,6 +44,10 @@ def _divider(label: str, color: str = _C.BLUE) -> None:
     print(f"{color}{_C.BOLD}{line}{_C.RESET}")
 
 
+def log_section(title: str) -> None:
+    _divider(title, _C.BLUE)
+
+
 def _log_simple(detail: str = "", color: str = _C.GRAY) -> None:
     print(f"{color}{detail}{_C.RESET}")
 

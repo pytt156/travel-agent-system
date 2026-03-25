@@ -11,21 +11,72 @@ from data.trip_data import TRIP_OPTIONS
 mcp = FastMCP("travel-agent-tools")
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Hjälpfunktioner för att tolka fritext
+# ─────────────────────────────────────────────────────────────────────────────
+
+
 def _extract_budget(text: str) -> int | None:
     match = re.search(r"(\d{4,6})", text.replace(" ", ""))
     return int(match.group(1)) if match else None
 
 
+# Svenska och engelska månadsnamn mappade till ett gemensamt värde
+_MONTH_MAP: dict[str, str] = {
+    "januari": "january",
+    "january": "january",
+    "februari": "february",
+    "february": "february",
+    "mars": "march",
+    "march": "march",
+    "april": "april",
+    "maj": "may",
+    "may": "may",
+    "juni": "june",
+    "june": "june",
+    "juli": "july",
+    "july": "july",
+    "augusti": "august",
+    "august": "august",
+    "september": "september",
+    "oktober": "october",
+    "october": "october",
+    "november": "november",
+    "december": "december",
+}
+
+
 def _extract_month(text: str) -> str | None:
-    if "juli" in text.lower():
-        return "july"
+    text = text.lower()
+    for word, value in _MONTH_MAP.items():
+        if word in text:
+            return value
     return None
 
 
+# Nyckelord som tyder på att användaren vill till en europeisk huvudstad
+_CAPITAL_KEYWORDS = [
+    "europeisk huvudstad",
+    "european capital",
+    "capital",
+    "huvudstad",
+    "europe",
+    "europa",
+]
+
+
 def _extract_destination_type(text: str) -> str:
-    if "europeisk huvudstad" in text.lower():
+    text_lower = text.lower()
+    if any(kw in text_lower for kw in _CAPITAL_KEYWORDS):
         return "european_capital"
-    return "unknown"
+    # Default: vi har bara europeiska städer i trip_data,
+    # så vi antar european_capital om inget annat anges
+    return "european_capital"
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# MCP tools
+# ─────────────────────────────────────────────────────────────────────────────
 
 
 @mcp.tool()
