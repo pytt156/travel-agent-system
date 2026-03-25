@@ -45,19 +45,22 @@ def parse_request(
 @mcp.tool()
 def get_trip_options(
     destination_type: Annotated[str, Field()],
-    month: Annotated[str, Field()],
-    budget_sek: Annotated[int, Field()],
+    month: Annotated[str | None, Field()],
+    budget_sek: Annotated[int | None, Field()],
 ) -> list[dict]:
     results = []
 
     for trip in TRIP_OPTIONS:
         if destination_type == "european_capital" and not trip["is_european_capital"]:
             continue
+
         if month and trip["month"] != month:
             continue
 
         option = trip.copy()
-        option["within_budget"] = option["total_price"] <= budget_sek
+        option["within_budget"] = (
+            option["total_price"] <= budget_sek if budget_sek is not None else True
+        )
         results.append(option)
 
     return results
