@@ -2,11 +2,12 @@ from __future__ import annotations
 
 from typing import Any
 
-from langchain_core.messages import SystemMessage, HumanMessage
+from langchain_core.messages import HumanMessage, SystemMessage
 
 from schemas.state import TravelState
 from utils.config import get_llm
 from utils.prompts import DOER_SYSTEM
+from utils.streaming_utils import handle_stream
 
 
 class DoerAgent:
@@ -50,16 +51,15 @@ Select the best option and explain briefly.
                 ),
             ]
 
-            response = self.llm.invoke(messages)
+            chunks = self.llm.stream(messages)
+            final_text = handle_stream(chunks, agent_name="Doer")
 
             state.doer_result = {
-                "raw_output": response.content,
+                "raw_output": final_text,
                 "selected_option": options[0] if options else None,
             }
-
             state.selected_option = state.doer_result["selected_option"]
             state.status = "executed"
-
             return state
 
         except Exception as e:

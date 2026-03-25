@@ -2,11 +2,12 @@ from __future__ import annotations
 
 from typing import Any
 
-from langchain_core.messages import SystemMessage, HumanMessage
+from langchain_core.messages import HumanMessage, SystemMessage
 
 from schemas.state import TravelState
 from utils.config import get_llm
 from utils.prompts import CRITIC_SYSTEM
+from utils.streaming_utils import handle_stream
 
 
 class CriticAgent:
@@ -42,16 +43,17 @@ Is the solution correct?
                 ),
             ]
 
-            response = self.llm.invoke(messages)
+            chunks = self.llm.stream(messages)
+            final_text = handle_stream(chunks, agent_name="Critic")
 
             state.critic_result = {
                 "validation": validation,
-                "llm_review": response.content,
+                "llm_review": final_text,
                 "approved": validation.get("approved", False),
+                "issues": validation.get("issues", []),
             }
 
             state.status = "reviewed" if state.critic_result["approved"] else "failed"
-
             return state
 
         except Exception as e:

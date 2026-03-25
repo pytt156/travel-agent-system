@@ -11,17 +11,11 @@ from data.trip_data import TRIP_OPTIONS
 mcp = FastMCP("travel-agent-tools")
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Hjälpfunktioner för att tolka fritext
-# ─────────────────────────────────────────────────────────────────────────────
-
-
 def _extract_budget(text: str) -> int | None:
     match = re.search(r"(\d{4,6})", text.replace(" ", ""))
     return int(match.group(1)) if match else None
 
 
-# Svenska och engelska månadsnamn mappade till ett gemensamt värde
 _MONTH_MAP: dict[str, str] = {
     "januari": "january",
     "january": "january",
@@ -54,7 +48,6 @@ def _extract_month(text: str) -> str | None:
     return None
 
 
-# Nyckelord som tyder på att användaren vill till en europeisk huvudstad
 _CAPITAL_KEYWORDS = [
     "europeisk huvudstad",
     "european capital",
@@ -69,14 +62,7 @@ def _extract_destination_type(text: str) -> str:
     text_lower = text.lower()
     if any(kw in text_lower for kw in _CAPITAL_KEYWORDS):
         return "european_capital"
-    # Default: vi har bara europeiska städer i trip_data,
-    # så vi antar european_capital om inget annat anges
     return "european_capital"
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# MCP tools
-# ─────────────────────────────────────────────────────────────────────────────
 
 
 @mcp.tool()
