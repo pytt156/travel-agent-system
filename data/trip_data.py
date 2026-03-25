@@ -1,0 +1,32 @@
+TRIP_OPTIONS = [
+    {
+        "city": "Prague",
+        "country": "Czech Republic",
+        "is_european_capital": True,
+        "month": "july",
+        "flight_price": 7000,
+        "hotel_price": 10000,
+        "total_price": 17000,
+        "booking_link": "https://example.com/book/prague",
+    },
+    {
+        "city": "Lisbon",
+        "country": "Portugal",
+        "is_european_capital": True,
+        "month": "july",
+        "flight_price": 9000,
+        "hotel_price": 12000,
+        "total_price": 21000,
+        "booking_link": "https://example.com/book/lisbon",
+    },
+    {
+        "city": "Paris",
+        "country": "France",
+        "is_european_capital": True,
+        "month": "july",
+        "flight_price": 11000,
+        "hotel_price": 18000,
+        "total_price": 29000,
+        "booking_link": "https://example.com/book/paris",
+    },
+]

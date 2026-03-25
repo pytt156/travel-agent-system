@@ -1414,6 +1414,7 @@ dependencies = [
     { name = "dotenv" },
     { name = "fastmcp" },
     { name = "langchain" },
+    { name = "langchain-core" },
     { name = "langchain-ollama" },
     { name = "pydantic" },
 ]
@@ -1423,6 +1424,7 @@ requires-dist = [
     { name = "dotenv", specifier = ">=0.9.9" },
     { name = "fastmcp", specifier = ">=3.1.1" },
     { name = "langchain", specifier = ">=1.2.13" },
+    { name = "langchain-core", specifier = ">=1.2.22" },
     { name = "langchain-ollama", specifier = ">=1.0.1" },
     { name = "pydantic", specifier = ">=2.12.5" },
 ]
